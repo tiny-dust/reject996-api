@@ -94,7 +94,7 @@ router.post('/login', (req, resp) => {
         data: {
           token,
           email,
-          user_id: r[0].id,
+          userId: r[0].id,
         },
       });
     } else {

@@ -4,8 +4,14 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const {
+  expressjwt: jwt,
+} = require('express-jwt');
+const fs = require('fs');
 const usersRouter = require('./routes/users');
 const companyRouter = require('./routes/company');
+
+const privateKey = fs.readFileSync(path.join(__dirname, './rsa/private_key.pem'));
 
 const app = express();
 
@@ -19,8 +25,30 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/company', companyRouter);
 app.use('/users', usersRouter);
 
+app.use(jwt({
+  secret: privateKey,
+  algorithms: ['RS256'],
+  getToken: function fromHeaderOrQuerystring(req) {
+    if (req.headers.token) {
+      return req.headers.token;
+    }
+    return null;
+  },
+}).unless({
+  path: ['users'],
+}));
+
 // catch 404 and forward to error handler
-app.use((req, res, next) => {
+app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    res.send({
+      code: 401,
+      message: 'invalid token...',
+      data: '',
+    });
+  } else {
+    next(err);
+  }
   next(createError(404));
 });
 

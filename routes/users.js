@@ -5,7 +5,7 @@ const {
   getT,
 } = require('../utils/email');
 const {
-  connection,
+  connection, redis,
 } = require('../db/config');
 const { createToken } = require('../utils/jwt');
 
@@ -17,6 +17,7 @@ router.get('/getCode', async (req, res) => {
   for (let i = 0; i < codeLen; i += 1) {
     codeStr += Math.floor(Math.random() * 10);
   }
+  redis.set(req.query.email, codeStr);
   const mail = {
     from: 'idioticzhou@foxmail.com', // 发件邮箱
     subject: '验证码',
@@ -32,7 +33,16 @@ router.get('/getCode', async (req, res) => {
 });
 
 router.post('/register', async (req, resp) => {
-  const { email, password } = req.body;
+  const { email, password, code } = req.body;
+  if (code !== redis.get(email)) {
+    resp.send({
+      code: 220,
+      msg: '验证码错误',
+      data: '',
+    });
+    redis.remove(email);
+    return;
+  }
   if (email !== '' && password !== '') {
     const searchSql = `select count(*) from user where email = '${email}'`;
     connection.query(searchSql, (err, res) => {

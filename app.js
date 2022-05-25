@@ -16,12 +16,33 @@ const limiter = rateLimit({
   max: 5,
   standardHeaders: true, // 在 `RateLimit-*` 标头中返回速率限制信息
   legacyHeaders: false, // 禁用 `X-RateLimit-*` 标头
+  message: {
+    code: 429,
+    message: '慢点慢点',
+    data: '',
+  },
 });
 const userLimit = rateLimit({
   windowMs: 60 * 1000, // 1m
   max: 2, // 将每个 IP 限制为每个 `window` 2 个请求（此处为每 1m)
   standardHeaders: true, // 在 `RateLimit-*` 标头中返回速率限制信息
   legacyHeaders: false, // 禁用 `X-RateLimit-*` 标头
+  message: {
+    code: 429,
+    message: '请不要辣么快',
+    data: '',
+  },
+});
+const codeLimit = rateLimit({
+  windowMs: 55 * 1000,
+  max: 1,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    code: 429,
+    message: '请一分钟后重试',
+    data: '',
+  },
 });
 const app = express();
 
@@ -33,6 +54,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/company', limiter);
 app.use('/users', userLimit);
+app.use('/users/getCode', codeLimit);
 
 app.use('/company', companyRouter);
 app.use('/users', usersRouter);

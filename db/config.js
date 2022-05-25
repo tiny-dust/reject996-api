@@ -20,8 +20,8 @@ class Redis {
         host: '150.158.181.254',
       },
       password: 'zxcvb931224',
-      legacyMode: true,
     });
+    this.client.on('error', (err) => console.log('Redis Client Error', err));
     this.client.connect();
   }
 
@@ -30,8 +30,9 @@ class Redis {
     return { [key]: value };
   }
 
-  get(key) {
-    return this.client.get(key);
+  async get(key) {
+    const value = await this.client.get(key);
+    return value;
   }
 
   remove(key) {

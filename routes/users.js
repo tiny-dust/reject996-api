@@ -11,13 +11,13 @@ const { createToken } = require('../utils/jwt');
 
 const router = express.Router();
 
-router.get('/getCode', async (req, res) => {
+router.get('/getCode', async (req, resp) => {
   let codeStr = ''; // 验证码
   const codeLen = 6; // 验证码长度
   for (let i = 0; i < codeLen; i += 1) {
     codeStr += Math.floor(Math.random() * 10);
   }
-  redis.set(req.query.email, codeStr);
+  redis.set(codeStr, req.query.email);
   const mail = {
     from: 'idioticzhou@foxmail.com', // 发件邮箱
     subject: '验证码',
@@ -25,16 +25,18 @@ router.get('/getCode', async (req, res) => {
     html: getT(codeStr),
   };
   const emailRes = await sendEmail(mail);
-  res.send = {
+  resp.send({
     code: 200,
     data: emailRes.info,
     msg: 'success',
-  };
+  });
 });
 
 router.post('/register', async (req, resp) => {
   const { email, password, code } = req.body;
-  if (code !== redis.get(email)) {
+  const checkCode = await redis.get(code);
+  console.log('checkCode: ', checkCode);
+  if (email !== checkCode) {
     resp.send({
       code: 220,
       msg: '验证码错误',

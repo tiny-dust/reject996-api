@@ -28,7 +28,7 @@ router.get('/getCode', async (req, resp) => {
   resp.send({
     code: 200,
     data: emailRes.info,
-    msg: 'success',
+    message: 'success',
   });
 });
 
@@ -38,7 +38,7 @@ router.post('/register', async (req, resp) => {
   if (email !== checkCode) {
     resp.send({
       code: 220,
-      msg: '验证码错误',
+      message: '验证码错误',
       data: '',
     });
     redis.remove(email);
@@ -60,14 +60,14 @@ router.post('/register', async (req, resp) => {
           }
           resp.send({
             code: 200,
-            msg: 'success',
+            message: 'success',
             data: r,
           });
         });
       } else {
         resp.send({
           code: 403,
-          msg: '邮箱已注册',
+          message: '邮箱已注册',
           data: '',
         });
       }
@@ -76,7 +76,7 @@ router.post('/register', async (req, resp) => {
     resp.send({
       code: 403,
       data: '',
-      msg: '邮箱或密码不能为空',
+      message: '邮箱或密码不能为空',
     });
   }
 });
@@ -101,7 +101,7 @@ router.post('/login', (req, resp) => {
       const token = createToken(email, r[0].id);
       resp.send({
         code: 200,
-        msg: 'success',
+        message: 'success',
         data: {
           token,
           email,
@@ -127,7 +127,7 @@ router.get('/intro', async (req, resp) => {
     }
     resp.send({
       code: 200,
-      msg: 'success',
+      message: 'success',
       data: r[0].intro,
     });
   });

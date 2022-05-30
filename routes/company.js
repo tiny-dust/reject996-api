@@ -60,7 +60,7 @@ router.get('/list', (req, resp) => {
     }
     resp.send({
       code: 200,
-      msg: 'success',
+      message: 'success',
       data: res,
       total: companyTotal,
     });
@@ -78,7 +78,7 @@ router.get('/detail', (req, resp) => {
     }
     resp.send({
       code: 200,
-      msg: 'success',
+      message: 'success',
       data: res,
     });
   });
@@ -104,19 +104,19 @@ router.post('/add-comment', (req, resp) => {
     }
     resp.send({
       code: 200,
-      msg: 'success',
+      message: 'success',
       data: '',
     });
   });
 });
 
-router.post('/add-company', async (req, resp) => {
+router.post('/add', async (req, resp) => {
   const { name, score, comment } = req.body;
   const isExist = await getCompanyNum(name);
   if (isExist > 0) {
     resp.send({
       code: 400,
-      msg: '该公司已存在',
+      message: '该公司已存在',
       data: '',
     });
     return;
@@ -133,7 +133,7 @@ router.post('/add-company', async (req, resp) => {
     }
     resp.send({
       code: 200,
-      msg: 'success',
+      message: 'success',
       data: '',
     });
   });

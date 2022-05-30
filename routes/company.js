@@ -30,6 +30,18 @@ function getCompanyNum(name) {
   });
 }
 
+function dealAvgByCompanyId(companyId) {
+  return new Promise((resolve) => {
+    const sql = `select avg(score) from company_comment where comment_id = ${companyId}`;
+    connection.query(sql, (err, res) => {
+      if (err) {
+        resolve(0);
+      }
+      resolve(res[0]['avg(score)'].toFixed(0));
+    });
+  });
+}
+
 let companyTotal = 0;
 totalNum().then((res) => {
   companyTotal = res;
@@ -97,11 +109,12 @@ router.post('/add-comment', (req, resp) => {
   const userId = user.id;
   const sql = `insert into company_comment (id, company_id, user_id, comment, score, pay) values ('${id}','${companyId}', '${userId}', '${comment}', '${score}', '${pay}')`;
 
-  connection.query(sql, (err) => {
+  connection.query(sql, async (err) => {
     if (err) {
       resp.send(err);
       return;
     }
+    await dealAvgByCompanyId(companyId);
     resp.send({
       code: 200,
       message: 'success',
@@ -124,8 +137,11 @@ router.post('/add', async (req, resp) => {
   const user = parseToken(req.headers.token);
 
   const id = snowflake.generate();
+  const comment_id = snowflake.generate();
   const userId = user.id;
   const sql = `insert into company (id,name, score, comment,user_id) values ('${id}','${name}', '${score}', '${comment}', '${userId}')`;
+  const insertSql = `insert into company_comment (id, company_id, user_id, comment, score, pay) values ('${comment_id}','${id}', '${userId}', '${comment}', '${score}', '12000')`;
+
   connection.query(sql, (err) => {
     if (err) {
       resp.send(err);
@@ -136,6 +152,12 @@ router.post('/add', async (req, resp) => {
       message: 'success',
       data: '',
     });
+  });
+
+  connection.query(insertSql, (err) => {
+    if (err) {
+      resp.send(err);
+    }
   });
 });
 

@@ -35,7 +35,6 @@ router.get('/getCode', async (req, resp) => {
 router.post('/register', async (req, resp) => {
   const { email, password, code } = req.body;
   const checkCode = await redis.get(code);
-  console.log('checkCode: ', checkCode);
   if (email !== checkCode) {
     resp.send({
       code: 220,
@@ -116,6 +115,21 @@ router.post('/login', (req, resp) => {
         data: '',
       });
     }
+  });
+});
+
+router.get('/intro', async (req, resp) => {
+  const sql = 'select intro from intro order by id desc limit 1';
+  connection.query(sql, (err, r) => {
+    if (err) {
+      resp.send(err);
+      return;
+    }
+    resp.send({
+      code: 200,
+      msg: 'success',
+      data: r[0].intro,
+    });
   });
 });
 

@@ -1,7 +1,10 @@
 const express = require('express');
 const { connection } = require('../db/config');
+const { parseToken } = require('../utils/jwt');
+const Snowflake = require('../utils/snowFlake');
 
 const router = express.Router();
+const snowflake = new Snowflake();
 
 function totalNum(table = 'company') {
   return new Promise((resolve) => {
@@ -14,6 +17,19 @@ function totalNum(table = 'company') {
     });
   });
 }
+
+function getCompanyNum(name) {
+  return new Promise((resolve) => {
+    const sql = `select count(*) from company where name like '%${name}%'`;
+    connection.query(sql, (err, res) => {
+      if (err) {
+        resolve(0);
+      }
+      resolve(res[0]['count(*)']);
+    });
+  });
+}
+
 let companyTotal = 0;
 totalNum().then((res) => {
   companyTotal = res;
@@ -64,6 +80,61 @@ router.get('/detail', (req, resp) => {
       code: 200,
       msg: 'success',
       data: res,
+    });
+  });
+});
+
+router.post('/add-comment', (req, resp) => {
+  const {
+    companyId,
+    comment,
+    score,
+    pay,
+  } = req.body;
+
+  const user = parseToken(req.headers.token);
+  const id = snowflake.generate();
+  const userId = user.id;
+  const sql = `insert into company_comment (id, company_id, user_id, comment, score, pay) values ('${id}','${companyId}', '${userId}', '${comment}', '${score}', '${pay}')`;
+
+  connection.query(sql, (err) => {
+    if (err) {
+      resp.send(err);
+      return;
+    }
+    resp.send({
+      code: 200,
+      msg: 'success',
+      data: '',
+    });
+  });
+});
+
+router.post('/add-company', async (req, resp) => {
+  const { name, score, comment } = req.body;
+  const isExist = await getCompanyNum(name);
+  if (isExist > 0) {
+    resp.send({
+      code: 400,
+      msg: '该公司已存在',
+      data: '',
+    });
+    return;
+  }
+  const user = parseToken(req.headers.token);
+
+  const id = snowflake.generate();
+  const userId = user.id;
+  const sql = `insert into company (id,name, score, comment,user_id) values ('${id}','${name}', '${score}', '${comment}', '${userId}')`;
+  connection.query(sql, (err) => {
+    if (err) {
+      resp.send(err);
+      return;
+    }
+    resp.send({
+      code: 200,
+      msg: 'success',
+      data: '',
     });
   });
 });

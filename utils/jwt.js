@@ -22,5 +22,5 @@ exports.createToken = (email, id) => {
 
 exports.parseToken = (token) => {
   const res = jwt.verify(token, publicKey);
-  console.log('res: ', res);
+  return res;
 };

@@ -42,6 +42,19 @@ function dealAvgByCompanyId(companyId) {
   });
 }
 
+async function updateScore(companyId) {
+  const score = await dealAvgByCompanyId(companyId);
+  return new Promise((resolve) => {
+    const sql = `update company set score = ${score} where id = ${companyId}`;
+    connection.query(sql, (err, res) => {
+      if (err) {
+        resolve(0);
+      }
+      resolve(res);
+    });
+  });
+}
+
 let companyTotal = 0;
 totalNum().then((res) => {
   companyTotal = res;
@@ -114,7 +127,7 @@ router.post('/add-comment', (req, resp) => {
       resp.send(err);
       return;
     }
-    await dealAvgByCompanyId(companyId);
+    await updateScore(companyId);
     resp.send({
       code: 200,
       message: 'success',

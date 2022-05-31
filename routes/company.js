@@ -32,12 +32,13 @@ function getCompanyNum(name) {
 
 function dealAvgByCompanyId(companyId) {
   return new Promise((resolve) => {
-    const sql = `select avg(score) from company_comment where comment_id = ${companyId}`;
+    const sql = `select avg(score) from company_comment where company_id = ${companyId}`;
     connection.query(sql, (err, res) => {
       if (err) {
         resolve(0);
       }
-      resolve(res[0]['avg(score)'].toFixed(0));
+      const avg = Number(res[0]['avg(score)']);
+      resolve(avg.toFixed(0));
     });
   });
 }

@@ -56,9 +56,7 @@ app.use('/company', limiter);
 app.use('/users', userLimit);
 app.use('/users/getCode', codeLimit);
 
-app.use('/company', companyRouter);
 app.use('/users', usersRouter);
-
 app.use(jwt({
   secret: privateKey,
   algorithms: ['RS256'],
@@ -69,8 +67,9 @@ app.use(jwt({
     return null;
   },
 }).unless({
-  path: ['users'],
+  path: ['/users/**'],
 }));
+app.use('/company', companyRouter);
 
 // catch 404 and forward to error handler
 app.use((err, req, res, next) => {

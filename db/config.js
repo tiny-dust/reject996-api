@@ -8,7 +8,8 @@ const connection = mysql.createConnection({
   host: '150.158.181.254',
   user: 'root',
   password: 'Zxcvb931224?',
-  database: 'reject996',
+  // database: 'reject996',
+  database: 'reject-996-bat',
 });
 
 class Redis {

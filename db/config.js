@@ -2,13 +2,14 @@ const {
   createClient,
 } = require('redis');
 const mysql = require('mysql2');
+const config = require('./config.json');
 
 const connection = mysql.createConnection({
   // host: '127.0.0.1',
-  host: '150.158.181.254',
-  user: 'root',
-  password: 'Zxcvb931224?',
-  database: 'reject996',
+  host: config.mysql.host,
+  user: config.mysql.user,
+  password: config.mysql.password,
+  database: config.mysql.database,
   // database: 'reject-996-bat',
 });
 
@@ -18,9 +19,9 @@ class Redis {
   constructor() {
     this.client = createClient({
       socket: {
-        host: '150.158.181.254',
+        host: config.redis.host,
       },
-      password: 'zxcvb931224',
+      password: config.redis.password,
     });
     this.client.on('error', (err) => console.log('Redis Client Error', err));
     this.client.connect();

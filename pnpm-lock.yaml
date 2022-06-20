@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@koa/cors': ^3.3.0
   connect-redis: ^6.1.3
   cookie-parser: ~1.4.4
   cors: ^2.8.5
@@ -24,6 +25,7 @@ specifiers:
   redis: ^4.1.0
 
 dependencies:
+  '@koa/cors': 3.3.0
   connect-redis: 6.1.3
   cookie-parser: 1.4.6
   cors: 2.8.5
@@ -81,6 +83,13 @@ packages:
   /@humanwhocodes/object-schema/1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
+
+  /@koa/cors/3.3.0:
+    resolution: {integrity: sha512-lzlkqLlL5Ond8jb6JLnVVDmD2OPym0r5kvZlMgAWiS9xle+Q5ulw1T358oW+RVguxUkANquZQz82i/STIRmsqQ==}
+    engines: {node: '>= 8.0.0'}
+    dependencies:
+      vary: 1.1.2
+    dev: false
 
   /@opencensus/core/0.0.8:
     resolution: {integrity: sha512-yUFT59SFhGMYQgX0PhoTR0LBff2BEhPrD9io1jWfF/VDbakRfs6Pq60rjv0Z7iaTav5gQlttJCX2+VPxFWCuoQ==}

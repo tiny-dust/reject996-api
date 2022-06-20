@@ -7,6 +7,7 @@
     "build": "pm2 start --name koa2 bin/www --watch"
   },
   "dependencies": {
+    "@koa/cors": "^3.3.0",
     "connect-redis": "^6.1.3",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",

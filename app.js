@@ -7,9 +7,7 @@ const cors = require('cors');
 const { expressjwt: jwt } = require('express-jwt');
 const fs = require('fs');
 const rateLimit = require('express-rate-limit');
-const enforceHttps = require('koa-sslify');
-const http = require('http');
-const https = require('https');
+const sslify = require('koa-sslify').default;
 
 const usersRouter = require('./routes/users');
 const companyRouter = require('./routes/company');
@@ -51,7 +49,7 @@ const codeLimit = rateLimit({
 const app = express();
 
 // Force HTTPS on all page
-app.use(enforceHttps());
+app.use(sslify());
 app.use(logger('dev'));
 app.use(cors());
 app.use(express.json());
@@ -106,15 +104,5 @@ app.use((err, req, res, next) => {
   res.render('error');
   next();
 });
-
-// SSL options
-const options = {
-  key: fs.readFileSync('./xn--v6q40c.key'), // ssl文件路径
-  cert: fs.readFileSync('./xn--v6q40c.pem'), // ssl文件路径
-};
-
-// start the server
-http.createServer(app.callback()).listen(80);
-https.createServer(options, app.callback()).listen(443);
 
 module.exports = app;

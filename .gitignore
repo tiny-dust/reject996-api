@@ -2,3 +2,7 @@
 node_modules
 
 db/config.json
+
+xn--v6q40c.*
+
+.DS_Store

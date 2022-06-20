@@ -16,7 +16,7 @@ specifiers:
   http-errors: ~1.6.3
   jsonwebtoken: ^8.5.1
   koa: ^2.13.4
-  koa-sslify: ^5.0.0
+  koa2-cors: ^2.0.6
   morgan: ~1.9.1
   mysql2: ^2.3.3
   nodemailer: ^6.7.5
@@ -37,7 +37,7 @@ dependencies:
   http-errors: 1.6.3
   jsonwebtoken: 8.5.1
   koa: 2.13.4
-  koa-sslify: 5.0.0
+  koa2-cors: 2.0.6
   morgan: 1.9.1
   mysql2: 2.3.3
   nodemailer: 6.7.5
@@ -2018,11 +2018,6 @@ packages:
       koa-compose: 4.1.0
     dev: false
 
-  /koa-sslify/5.0.0:
-    resolution: {integrity: sha512-3Qc/DxPcH4BavYkt7xOVDFbaS7nR8oCozb/0dlIpLlyGVhFXcjHETWBwE3QrDLwjKOVJj6ykwRJoNzPT9QxCag==}
-    engines: {node: '>6.0.0'}
-    dev: false
-
   /koa/2.13.4:
     resolution: {integrity: sha512-43zkIKubNbnrULWlHdN5h1g3SEKXOEzoAlRsHOTFpnlDu8JlAOZSMJBLULusuXRequboiwJcj5vtYXKB3k7+2g==}
     engines: {node: ^4.8.4 || ^6.10.1 || ^7.10.1 || >= 8.1.4}
@@ -2052,6 +2047,11 @@ packages:
       vary: 1.1.2
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /koa2-cors/2.0.6:
+    resolution: {integrity: sha512-JRCcSM4lamM+8kvKGDKlesYk2ASrmSTczDtGUnIadqMgnHU4Ct5Gw7Bxt3w3m6d6dy3WN0PU4oMP43HbddDEWg==}
+    engines: {node: '>= 7.6.0'}
     dev: false
 
   /latest-version/5.1.0:

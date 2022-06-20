@@ -3,11 +3,10 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const cors = require('@koa/cors');
+const cors = require('cors');
 const { expressjwt: jwt } = require('express-jwt');
 const fs = require('fs');
 const rateLimit = require('express-rate-limit');
-const sslify = require('koa-sslify').default;
 
 const usersRouter = require('./routes/users');
 const companyRouter = require('./routes/company');
@@ -48,8 +47,6 @@ const codeLimit = rateLimit({
 });
 const app = express();
 
-// Force HTTPS on all page
-app.use(sslify());
 app.use(logger('dev'));
 app.use(cors());
 app.use(express.json());
